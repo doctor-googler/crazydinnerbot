@@ -5,7 +5,7 @@ var path = require('path');
 
 var useEmulator = (process.env.NODE_ENV == 'development');
 
-var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure.BotServiceConnector({
+var connector = useEmulator ? new builder.ChatConnector().listen() : new botbuilder_azure.BotServiceConnector({
     appId: process.env['MicrosoftAppId'],
     appPassword: process.env['MicrosoftAppPassword'],
     stateEndpoint: process.env['BotStateEndpoint'],
@@ -19,10 +19,10 @@ bot.recognizer({
     var intent = { score: 0.0 };
     if (context.message.text) {
       switch (context.message.text.toLowerCase()) {
-        case 'старт':
+        case 'start':
           intent = { score: 1.0, intent: 'Start' };
           break;
-        case 'стоп':
+        case 'stop':
           intent = { score: 1.0, intent: 'Stop' };
           break;
         default: break;

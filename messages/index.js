@@ -14,10 +14,27 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
 
 var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));
-
-bot.dialog('/', function (session) {
-    session.send('You said ' + session.message.text);
+bot.recognizer({
+  recognize: function (context, done) {
+    var intent = { score: 0.0 };
+    if (context.message.text) {
+      switch (context.message.text.toLowerCase()) {
+        case 'старт':
+          intent = { score: 1.0, intent: 'Start' };
+          break;
+        case 'стоп':
+          intent = { score: 1.0, intent: 'Stop' };
+          break;
+        default: break;
+      }
+    }
+    done(null, intent);
+  }
 });
+
+bot.dialog('startDialog', function (session) {
+  session.send('Super kek, y\'ve been started a conversation!');
+}).triggerAction({ matches:'Start' });
 
 if (useEmulator) {
     var restify = require('restify');
@@ -25,7 +42,7 @@ if (useEmulator) {
     server.listen(3978, function() {
         console.log('test bot endpont at http://localhost:3978/api/messages');
     });
-    server.post('/api/messages', connector.listen());    
+    server.post('/api/messages', connector.listen());
 } else {
     module.exports = { default: connector.listen() }
 }

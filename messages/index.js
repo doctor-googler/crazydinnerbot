@@ -10,7 +10,7 @@ var connector = useEmulator ? new builder.ChatConnector().listen() : new botbuil
     appPassword: process.env['MicrosoftAppPassword'],
     stateEndpoint: process.env['BotStateEndpoint'],
     openIdMetadata: process.env['BotOpenIdMetadata']
-});
+}).listen();
 
 var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));

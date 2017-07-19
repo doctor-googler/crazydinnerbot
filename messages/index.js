@@ -14,12 +14,14 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
 
 var bot = new builder.UniversalBot(connector);
 bot.localePath(path.join(__dirname, './locale'));
-
+bot.dialog('/', (session) => {
+  session.send('Hello man!');
+});
 bot.dialog('kek', (session, args, next) => {
   session.send('You triggered');
 }).triggerAction({
   matches: /^kekus$/
-})
+});
 // bot.recognizer({
 //   recognize: function (context, done) {
 //     var intent = { score: 0.0 };
